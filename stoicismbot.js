@@ -12,12 +12,12 @@ let quotes = [];
 let usersData = [];
 
 // Read quotes and user data from file
-fs.readFile('quotes.json', 'utf8', (err, data) => {
+fs.readFile('/home/ubuntu/stoicismbot/quotes.json', (err, data) => {
 if (err) throw err;
 quotes = JSON.parse(data);
 });
 
-fs.readFile('usersData.json', 'utf8', (err, data) => {
+fs.readFile('/home/ubuntu/stoicismbot/usersData.json', 'utf8', (err, data) => {
 if (err) throw err;
 usersData = JSON.parse(data);
 });
