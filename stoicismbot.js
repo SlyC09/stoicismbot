@@ -3,6 +3,11 @@ const fs = require('fs');
 const token = '5656691460:AAFl9Ljwh3hijUCHYbPUkDZlx-QNDKSolKM';
 const bot = new TelegramBot(token, { polling: true });
 
+const donateButton = {
+  text: 'Donate: На сервера и обновления',
+  url: 'https://www.donationalerts.com/r/everydaystoicismbot'
+};
+
 let quotes = [];
 let usersData = [];
 
@@ -16,8 +21,6 @@ fs.readFile('usersData.json', 'utf8', (err, data) => {
 if (err) throw err;
 usersData = JSON.parse(data);
 });
-
-
 
 // Map to store chat id and its next message time
 const chatMap = new Map();
@@ -48,7 +51,7 @@ fs.writeFileSync('usersData.json', JSON.stringify(usersData), 'utf8');
 
 // Send quote and increment the sent and read count
 const quote = quotes[Math.floor(Math.random() * quotes.length)];
-bot.sendMessage(chatId, quote.text).then(() => {
+bot.sendMessage(chatId, quote.text, { reply_markup: { inline_keyboard: [[donateButton]] } }).then(() => {
 usersData[chatId].sent += 1;
 fs.writeFileSync('usersData.json', JSON.stringify(usersData), 'utf8');
 });
@@ -72,7 +75,7 @@ const now = new Date();
 for (const [chatId, nextMessageTime] of chatMap) {
 if (nextMessageTime <= now) {
 const quote = quotes[Math.floor(Math.random() * quotes.length)];
-bot.sendMessage(chatId, quote.text).then(() => {
+bot.sendMessage(chatId, quote.text, { reply_markup: { inline_keyboard: [[donateButton]] } }).then(() => {
 usersData[chatId].sent += 1;
 fs.writeFileSync('usersData.json', JSON.stringify(usersData), 'utf8');
 });
@@ -86,5 +89,4 @@ await new Promise((resolve) => setTimeout(resolve, 60000));
 // Start the async function
 sendDailyMessage().catch(console.error);
 
-// Может убрать чтобы не дублировать цикл?
 let botUsersCount = Object.keys(usersData);
